@@ -1,0 +1,91 @@
+import os
+import cv2
+import random
+
+label_path = 'C:/Users/dlg/Desktop/images_trans/label/'
+for label in os.listdir(label_path):
+    """获取原图像像素"""
+    z = label
+    img = cv2.imread('C:/Users/dlg/Desktop/images_trans/train/'+str(label[:-4]) + '.jpg')
+    h, w, c = img.shape
+
+    read_txt = open(label_path + str(label), "r", encoding="utf-8")
+    x_c = []
+    y_c = []
+    w_c = []
+    h_c = []
+
+    for line in read_txt:
+        if line[1:2] == " " or line[1:2] == "0":
+            x_c.append(line[-28:-22])
+            y_c.append(line[-21:-15])
+            w_c.append(line[-14:-8])
+            h_c.append(line[-7:-1])
+
+        length = int(len(x_c))
+    x = 0
+    l1 = []
+    l2 = []
+    l3 = []
+    l4 = []
+    """
+    分别求bbox的四点坐标
+    """
+    while x < length:
+        x_, y_, w_, h_ = eval(x_c[x]), eval(y_c[x]), eval(w_c[x]), eval(h_c[x])
+
+        x1 = w * x_ - 0.5 * w * w_
+        x2 = w * x_ + 0.5 * w * w_
+        y1 = h * y_ - 0.5 * h * h_
+        y2 = h * y_ + 0.5 * h * h_
+
+        l1.append(x1)
+        l2.append(x2)
+        l3.append(y1)
+        l4.append(y2)
+
+        x += 1
+    print(len(l1))
+    for i in range(len(l1)):
+        for j in range(i + 1, len(l1)):
+            if l1[i] > l1[j]:
+                num = l1[i]
+                l1[i] = l1[j]
+                l1[j] = num
+    for i in range(len(l2)):
+        for j in range(i + 1, len(l2)):
+            if l2[i] > l2[j]:
+                num = l2[i]
+                l2[i] = l2[j]
+                l2[j] = num
+    for i in range(len(l3)):
+        for j in range(i + 1, len(l3)):
+            if l3[i] > l3[j]:
+                num = l3[i]
+                l3[i] = l3[j]
+                l3[j] = num
+    for i in range(len(l4)):
+        for j in range(i + 1, len(l4)):
+            if l4[i] > l4[j]:
+                num = l4[i]
+                l4[i] = l4[j]
+                l4[j] = num
+    # 按照不同比例裁剪多张图片
+    # q = 0
+    # while q < 3:
+    #     a1 = random.randint(0, 5)
+    #     a2 = random.randint(0, 5)
+    #     a3 = random.randint(0, 5)
+    #     a4 = random.randint(0, 5)
+
+        cropped = img[int(l3[0]):int(l4[-1]), int(l1[0]):int(l2[-1])]  # 裁剪坐标为[y1:y2, x1:x2]
+        # cv2.imshow("img", cropped)
+
+        # 按照不同比例裁剪后重新命名写入
+        # cv2.imwrite("C:\\Users\\dlg\\Desktop\\images_trans\\new_image\\"+str(z[:-4])+"("+str(q)+")"+".jpg", cropped)
+        cv2.imwrite("C:/Users/dlg/Desktop/images_trans/crop_images/" + str(z[:-4]) + ".jpg", cropped)
+        # cv2.waitKey(0)
+        cv2.destroyAllWindows()
+
+
+
