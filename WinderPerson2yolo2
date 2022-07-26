@@ -1,0 +1,14 @@
+import os
+from pathlib import Path
+from PIL import Image
+import csv
+import shutil
+       
+wd = os.getcwd()
+
+anns = os.listdir('train')
+for ann in anns:
+    if ann[-3:] != 'jpg':
+        continue
+    shutil.copy(wd + '/train/' + ann[:-3] + 'jpg',wd + '/train1/' + ann[:-3] + 'jpg')
+    shutil.copy(wd + '/train/' + ann[:-3] + 'txt',wd + '/train1/' + ann[:-3] + 'txt')
