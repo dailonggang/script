@@ -1,0 +1,16 @@
+import os
+import shutil
+import tqdm
+
+txt_path = 'C:/Users/dlg/Desktop/test/labels/'
+picture_path = 'C:/Users/dlg/Desktop/test/images/'
+new_path = 'C:/Users/dlg/Desktop/test/new_photo/'
+
+files = os.listdir(txt_path)
+pic_files = os.listdir(picture_path)
+for i in tqdm.tqdm(range(len(pic_files))):
+    # print(files[i][:-4]+".jpg")
+    if (pic_files[i][:-4]+".txt") in files:
+        old_file_path = picture_path + '/' + pic_files[i]
+        new_file_path = new_path + '/' + pic_files[i]
+        shutil.copy(old_file_path, new_file_path)
