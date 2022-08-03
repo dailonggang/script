@@ -1,0 +1,21 @@
+import os
+
+from PIL import Image
+
+path = 'C:/Users/dlg/Desktop/VOCdevkit_smoke/images/val/'  # 要处理的图像所在目录
+newpath = 'C:/Users/dlg/Desktop/VOCdevkit_smoke/images/val/'  # 转换后的图像存储目录
+
+
+def picture(path):
+    files = os.listdir(path)
+    for i in files:
+        print(i)
+        files = os.path.join(path, i)
+        img = Image.open(files).convert('RGB')
+        dirpath = newpath
+        file_name, file_extend = os.path.splitext(i)
+        dst = os.path.join(os.path.abspath(dirpath), file_name + '.jpg')
+        img.save(dst)
+
+
+picture(path)
