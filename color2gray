@@ -1,0 +1,10 @@
+from PIL import Image
+import os
+path = 'C:/Users/dlg/Desktop/helmet/images/val'
+file_list = os.listdir(path)
+for file in file_list:
+
+    print(file)
+    I = Image.open(path+"/"+file)
+    L = I.convert('L')
+    L.save(path+"/"+file)
