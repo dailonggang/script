@@ -1,0 +1,40 @@
+import os
+
+label_path = './labels/train'
+
+
+def filechange(path):
+    # 遍历文件夹下的txt文件
+    for label in os.listdir(path):
+        # 读取文件夹绝对路径
+        file_path = os.path.abspath(path)
+        print(file_path)
+        # 读取txt文件绝对路径
+        txt_path = os.path.join(file_path, label)
+        print(txt_path)
+        fread = open(txt_path, 'r')
+        fwrite = open("%s.backup" % txt_path, 'w')
+        while True:
+            line = fread.readline()
+            if len(line) > 0:
+                content = line.split()
+                # 按照自己实际需要修改下面代码
+                if content[0] == '3':
+                    content[0] = str(0)
+                elif content[0] == '4':
+                    content[0] = str(1)
+                else:
+                    content[0] = content[0]
+                new_label = content[0] + ' ' + content[1] + ' ' + content[2]\
+                            + ' ' + content[3] + ' ' + content[4] + '\r'
+                fwrite.write(new_label)  # 修改后写入新文件
+            else:
+                break
+
+        fread.close()
+        fwrite.close()
+        os.remove(txt_path)
+        os.rename("%s.backup" % txt_path, txt_path)
+
+
+filechange(label_path)
